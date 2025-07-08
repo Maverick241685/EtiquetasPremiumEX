@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monday-like CRM</title>
+    <title>EPEXCRM Software</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -382,7 +382,10 @@
     <div id="app" class="min-h-screen bg-gray-100 font-sans text-gray-900">
         <header class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-md p-4">
             <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-                <h1 class="text-3xl font-extrabold mb-2 sm:mb-0">Monday-like CRM</h1>
+                <div class="flex items-center mb-2 sm:mb-0">
+                    <img src="https://placehold.co/50x50/000000/FFFFFF?text=EPEX" alt="EPEXCRM Logo" class="h-12 w-12 mr-3 rounded-full">
+                    <h1 class="text-3xl font-extrabold">EPEXCRM Software</h1>
+                </div>
                 <nav class="flex space-x-4">
                     <button id="nav-boards" class="px-4 py-2 rounded-md transition duration-200 ease-in-out">
                         Boards
@@ -409,9 +412,23 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration (Provided by user)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdanV3_bwb1cZfa_ujzT7dKRwIhhGAwYs",
+            authDomain: "etiquetaspremiumex-95676.firebaseapp.com",
+            projectId: "etiquetaspremiumex-95676",
+            storageBucket: "etiquetaspremiumex-95676.firebasestorage.app",
+            messagingSenderId: "544916225039",
+            appId: "1:544916225039:web:e54e7148bdb1a9fcbbf77a"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
 
         // Global State
         let db = null;
@@ -1174,7 +1191,7 @@
                     console.error("Firestore DB or User ID not available.");
                     return;
                 }
-                await addDoc(collection(db, `artifacts/${__app_id}/users/${userId}/boards`), {
+                await addDoc(collection(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/boards`), {
                     ...boardData,
                     userId: userId
                 });
@@ -1191,7 +1208,7 @@
                     console.error("Firestore DB or User ID not available.");
                     return;
                 }
-                const boardRef = doc(db, `artifacts/${__app_id}/users/${userId}/boards`, boardData.id);
+                const boardRef = doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/boards`, boardData.id);
                 await updateDoc(boardRef, boardData);
                 currentView = 'boards';
                 editingBoard = null;
@@ -1211,14 +1228,14 @@
                     return;
                 }
                 const itemsToDeleteQuery = query(
-                    collection(db, `artifacts/${__app_id}/users/${userId}/items`),
+                    collection(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/items`),
                     where("boardId", "==", id)
                 );
                 const itemsSnapshot = await getDocs(itemsToDeleteQuery);
-                const deleteItemPromises = itemsSnapshot.docs.map(d => deleteDoc(doc(db, `artifacts/${__app_id}/users/${userId}/items`, d.id)));
+                const deleteItemPromises = itemsSnapshot.docs.map(d => deleteDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/items`, d.id)));
                 await Promise.all(deleteItemPromises);
 
-                await deleteDoc(doc(db, `artifacts/${__app_id}/users/${userId}/boards`, id));
+                await deleteDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/boards`, id));
                 renderApp(); // Re-render after deletion
             } catch (e) {
                 console.error("Error deleting document: ", e);
@@ -1231,7 +1248,7 @@
                     console.error("Firestore DB or User ID not available.");
                     return;
                 }
-                await addDoc(collection(db, `artifacts/${__app_id}/users/${userId}/items`), {
+                await addDoc(collection(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/items`), {
                     ...itemData,
                     userId: userId
                 });
@@ -1248,7 +1265,7 @@
                     console.error("Firestore DB or User ID not available.");
                     return;
                 }
-                const itemRef = doc(db, `artifacts/${__app_id}/users/${userId}/items`, itemData.id);
+                const itemRef = doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/items`, itemData.id);
                 await updateDoc(itemRef, itemData);
                 currentView = 'items';
                 editingItem = null;
@@ -1267,7 +1284,7 @@
                     console.error("Firestore DB or User ID not available.");
                     return;
                 }
-                await deleteDoc(doc(db, `artifacts/${__app_id}/users/${userId}/items`, id));
+                await deleteDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/items`, id));
                 renderApp(); // Re-render after deletion
             } catch (e) {
                 console.error("Error deleting item: ", e);
@@ -1382,21 +1399,48 @@
         // --- Firebase Initialization and Data Listeners ---
         window.onload = async () => {
             try {
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-
-                if (Object.keys(firebaseConfig).length === 0) {
-                    console.error("Firebase config is missing. Please ensure __firebase_config is provided.");
-                    loadingScreen.style.display = 'none';
-                    mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Firebase configuration missing. Cannot load data.</p>';
-                    return;
-                }
-
-                const app = initializeApp(firebaseConfig);
+                // Initialize Firestore and Auth instances
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                onAuthStateChanged(auth, async (user) => {
+                // Add a console warning if Anonymous Authentication is not enabled.
+                // This is a common cause for "auth/configuration-not-found" when using signInAnonymously.
+                console.warn("Si encuentras el error 'auth/configuration-not-found', asegúrate de que la Autenticación Anónima esté habilitada en la configuración de tu proyecto de Firebase.");
+
+                // Initial sign-in attempt
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token !== '') {
+                        console.log("Intentando signInWithCustomToken...");
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                        console.log("signInWithCustomToken exitoso.");
+                    } else {
+                        console.log("No se encontró token personalizado o está vacío. Intentando signInAnonymously...");
+                        await signInAnonymously(auth);
+                        console.log("signInAnonymously exitoso.");
+                    }
+                } catch (initialSignInError) {
+                    console.error("Error durante el intento de inicio de sesión inicial:", initialSignInError);
+                    // If custom token fails, try anonymous as a fallback for robustness
+                    if (initialSignInError.code === 'auth/custom-token-mismatch' || initialSignInError.code === 'auth/invalid-custom-token') {
+                        console.warn("El token personalizado falló, recurriendo al inicio de sesión anónimo.");
+                        try {
+                            await signInAnonymously(auth);
+                            console.log("Inicio de sesión anónimo de respaldo exitoso.");
+                        } catch (anonymousFallbackError) {
+                            console.error("Error en el inicio de sesión anónimo de respaldo:", anonymousFallbackError);
+                            loadingScreen.style.display = 'none';
+                            mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Fallo en la autenticación de respaldo. Por favor, inténtalo de nuevo.</p>';
+                            return; // Stop further execution if even fallback fails
+                        }
+                    } else {
+                        loadingScreen.style.display = 'none';
+                        mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Fallo en la autenticación. Por favor, inténtalo de nuevo.</p>';
+                        return; // Stop further execution if initial sign-in fails
+                    }
+                }
+
+                // Now set up the auth state listener for subsequent changes
+                onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         userIdSpan.textContent = userId;
@@ -1404,41 +1448,34 @@
                         loadingScreen.style.display = 'none';
 
                         // Set up Firestore listeners after auth is ready
-                        const boardsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/boards`));
+                        const boardsQuery = query(collection(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/boards`));
                         onSnapshot(boardsQuery, (snapshot) => {
                             boards = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                            renderApp(); // Re-render whenever boards change
+                            renderApp();
                         }, (error) => {
-                            console.error("Error fetching boards:", error);
+                            console.error("Error al obtener tableros:", error);
                         });
 
-                        const itemsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/items`));
+                        const itemsQuery = query(collection(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/items`));
                         onSnapshot(itemsQuery, (snapshot) => {
                             items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                            renderApp(); // Re-render whenever items change
+                            renderApp();
                         }, (error) => {
-                            console.error("Error fetching items:", error);
+                            console.error("Error al obtener elementos:", error);
                         });
 
                     } else {
-                        try {
-                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                                await signInWithCustomToken(auth, __initial_auth_token);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
-                        } catch (error) {
-                            console.error("Error signing in:", error);
-                            loadingScreen.style.display = 'none';
-                            mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Authentication failed. Please try again.</p>';
-                        }
+                        // This block will be hit if the user logs out or initial sign-in failed and no fallback worked
+                        console.log("Usuario no autenticado. Mostrando pantalla de carga.");
+                        loadingScreen.style.display = 'none';
+                        mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Sesión cerrada o no iniciada. Por favor, recarga la página para intentar iniciar sesión.</p>';
                     }
                 });
 
             } catch (error) {
-                console.error("Error initializing Firebase:", error);
+                console.error("Error al inicializar Firebase:", error);
                 loadingScreen.style.display = 'none';
-                mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Failed to initialize application. Check console for details.</p>';
+                mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Fallo al inicializar la aplicación. Consulta la consola para más detalles.</p>';
             }
         };
 
