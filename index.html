@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monday-like CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .bg-gradient-to-r {
+            background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        }
+        .from-indigo-600 {
+            --tw-gradient-from: #4f46e5;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(79, 70, 229, 0));
+        }
+        .to-purple-700 {
+            --tw-gradient-to: #6d28d9;
+        }
+        .text-white {
+            color: #fff;
+        }
+        .text-indigo-700 {
+            color: #4338ca;
+        }
+        .bg-white {
+            background-color: #fff;
+        }
+        .hover\:bg-indigo-500:hover {
+            background-color: #6366f1;
+        }
+        .focus\:outline-none:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+        .focus\:ring-2:focus {
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+        }
+        .focus\:ring-indigo-500:focus {
+            --tw-ring-color: #6366f1;
+        }
+        .focus\:ring-offset-2:focus {
+            --tw-ring-offset-width: 2px;
+        }
+        .transition {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        .duration-150 {
+            transition-duration: 150ms;
+        }
+        .ease-in-out {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        .font-extrabold {
+            font-weight: 800;
+        }
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+        .sm\:mb-0 {
+            margin-bottom: 0;
+        }
+        .p-4 {
+            padding: 1rem;
+        }
+        .py-8 {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .rounded-md {
+            border-radius: 0.375rem;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .sm\:flex-row {
+            flex-direction: row;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .items-center {
+            align-items: center;
+        }
+        .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(1rem * var(--tw-space-x-reverse));
+            margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+        }
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        .bg-opacity-20 {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+        .min-h-screen {
+            min-height: 100vh;
+        }
+        .text-gray-900 {
+            color: #111827;
+        }
+        .text-gray-700 {
+            color: #374151;
+        }
+        .text-gray-600 {
+            color: #4b5563;
+        }
+        .text-gray-800 {
+            color: #1f2937;
+        }
+        .text-gray-50 {
+            color: #f9fafb;
+        }
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .hover\:bg-indigo-700:hover {
+            background-color: #4f46e5;
+        }
+        .focus\:ring-indigo-500:focus {
+            --tw-ring-color: #6366f1;
+        }
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        .mt-10 {
+            margin-top: 2.5rem;
+        }
+        .grid {
+            display: grid;
+        }
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        .gap-6 {
+            gap: 1.5rem;
+        }
+        .hover\:shadow-lg:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .transition {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        .duration-200 {
+            transition-duration: 200ms;
+        }
+        .ease-in-out {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        .text-gray-900 {
+            color: #111827;
+        }
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+        .text-gray-700 {
+            color: #374151;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+        .mt-4 {
+            margin-top: 1rem;
+        }
+        .space-x-3 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+            margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+        }
+        .flex-1 {
+            flex: 1 1 0%;
+        }
+        .bg-blue-500 {
+            background-color: #3b82f6;
+        }
+        .hover\:bg-blue-600:hover {
+            background-color: #2563eb;
+        }
+        .focus\:ring-blue-500:focus {
+            --tw-ring-color: #3b82f6;
+        }
+        .bg-yellow-500 {
+            background-color: #f59e0b;
+        }
+        .hover\:bg-yellow-600:hover {
+            background-color: #d97706;
+        }
+        .focus\:ring-yellow-500:focus {
+            --tw-ring-color: #f59e0b;
+        }
+        .bg-red-500 {
+            background-color: #ef4444;
+        }
+        .hover\:bg-red-600:hover {
+            background-color: #dc2626;
+        }
+        .focus\:ring-red-500:focus {
+            --tw-ring-color: #ef4444;
+        }
+        .max-w-lg {
+            max-width: 32rem;
+        }
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .my-8 {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+        }
+        .block {
+            display: block;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .border {
+            border-width: 1px;
+        }
+        .border-gray-300 {
+            border-color: #d1d5db;
+        }
+        .focus\:border-indigo-500:focus {
+            border-color: #6366f1;
+        }
+        .bg-gray-200 {
+            background-color: #e5e7eb;
+        }
+        .hover\:bg-gray-300:hover {
+            background-color: #d1d5db;
+        }
+        .focus\:ring-gray-500:focus {
+            --tw-ring-color: #6b7280;
+        }
+        .bg-green-600 {
+            background-color: #059669;
+        }
+        .hover\:bg-green-700:hover {
+            background-color: #047857;
+        }
+        .focus\:ring-green-500:focus {
+            --tw-ring-color: #10b981;
+        }
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        .bg-gray-50 {
+            background-color: #f9fafb;
+        }
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .gap-4 {
+            gap: 1rem;
+        }
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="min-h-screen bg-gray-100 font-sans text-gray-900">
+        <header class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-md p-4">
+            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+                <h1 class="text-3xl font-extrabold mb-2 sm:mb-0">Monday-like CRM</h1>
+                <nav class="flex space-x-4">
+                    <button id="nav-boards" class="px-4 py-2 rounded-md transition duration-200 ease-in-out">
+                        Boards
+                    </button>
+                    <button id="nav-items" class="px-4 py-2 rounded-md transition duration-200 ease-in-out">
+                        Items
+                    </button>
+                    <button id="nav-dashboard" class="px-4 py-2 rounded-md transition duration-200 ease-in-out">
+                        Dashboard
+                    </button>
+                </nav>
+            </div>
+            <div id="user-id-display" class="text-center text-sm mt-2 hidden">
+                Logged in as: <span class="font-mono bg-white bg-opacity-20 px-2 py-1 rounded-md text-xs"></span>
+            </div>
+        </header>
+
+        <main id="main-content" class="py-8">
+            <!-- Content will be rendered here by JavaScript -->
+            <div id="loading-screen" class="flex items-center justify-center min-h-screen bg-gray-100">
+                <div class="text-xl font-semibold text-gray-700">Loading application...</div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global State
+        let db = null;
+        let auth = null;
+        let userId = null;
+        let boards = [];
+        let items = [];
+        let currentView = 'boards'; // 'boards', 'items', 'addBoard', 'editBoard', 'addItem', 'editItem', 'dashboard'
+        let editingBoard = null;
+        let editingItem = null;
+        let selectedBoard = null; // For viewing items of a specific board
+
+        // DOM Elements
+        const mainContent = document.getElementById('main-content');
+        const loadingScreen = document.getElementById('loading-screen');
+        const navBoardsBtn = document.getElementById('nav-boards');
+        const navItemsBtn = document.getElementById('nav-items');
+        const navDashboardBtn = document.getElementById('nav-dashboard');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const userIdSpan = userIdDisplay.querySelector('span');
+
+        // --- Utility Functions ---
+        function formatCurrency(value) {
+            return value !== null && value !== undefined ? `$${parseFloat(value).toFixed(2)}` : 'N/A';
+        }
+
+        function formatDate(timestamp) {
+            return timestamp && timestamp instanceof Timestamp ? timestamp.toDate().toLocaleDateString() : 'N/A';
+        }
+
+        // --- Render Functions (mimicking React components) ---
+
+        function renderBoardForm(boardData = null) {
+            mainContent.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto my-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">${boardData ? 'Edit Board' : 'Create New Board'}</h2>
+                    <form id="board-form" class="space-y-4">
+                        <div>
+                            <label htmlFor="title" class="block text-sm font-medium text-gray-700">Board Title</label>
+                            <input
+                                type="text"
+                                id="board-title"
+                                value="${boardData?.title || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required
+                            />
+                        </div>
+                        <div class="flex justify-end space-x-3">
+                            <button
+                                type="button"
+                                id="board-cancel-btn"
+                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                id="board-save-btn"
+                                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                            >
+                                Save Board
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+
+            document.getElementById('board-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('board-title').value;
+                if (boardData) {
+                    await handleUpdateBoard({ ...boardData, title });
+                } else {
+                    await handleAddBoard({ title });
+                }
+            });
+
+            document.getElementById('board-cancel-btn').addEventListener('click', () => {
+                currentView = 'boards';
+                renderApp();
+            });
+        }
+
+        function renderBoardList() {
+            mainContent.innerHTML = `
+                <div class="container mx-auto p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800">Boards</h2>
+                        <button
+                            id="add-board-btn"
+                            class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                        >
+                            Create New Board
+                        </button>
+                    </div>
+
+                    ${boards.length === 0 ? `
+                        <p class="text-center text-gray-600 text-lg mt-10">No boards found. Create your first board!</p>
+                    ` : `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="boards-grid">
+                            ${boards.map(board => `
+                                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${board.title}</h3>
+                                    </div>
+                                    <div class="mt-4 flex space-x-3">
+                                        <button
+                                            data-board-id="${board.id}"
+                                            class="view-items-btn flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                                        >
+                                            View Items
+                                        </button>
+                                        <button
+                                            data-board-id="${board.id}"
+                                            class="edit-board-btn flex-1 px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            data-board-id="${board.id}"
+                                            class="delete-board-btn flex-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+
+            document.getElementById('add-board-btn').addEventListener('click', () => {
+                currentView = 'addBoard';
+                editingBoard = null;
+                renderApp();
+            });
+
+            document.querySelectorAll('.view-items-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const boardId = e.target.dataset.boardId;
+                    selectedBoard = boards.find(b => b.id === boardId);
+                    currentView = 'items';
+                    renderApp();
+                });
+            });
+
+            document.querySelectorAll('.edit-board-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const boardId = e.target.dataset.boardId;
+                    editingBoard = boards.find(b => b.id === boardId);
+                    currentView = 'editBoard';
+                    renderApp();
+                });
+            });
+
+            document.querySelectorAll('.delete-board-btn').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const boardId = e.target.dataset.boardId;
+                    await handleDeleteBoard(boardId);
+                });
+            });
+        }
+
+        function renderItemForm(itemData = null) {
+            const boardOptions = boards.map(board => `
+                <option value="${board.id}" ${board.id === (itemData?.boardId || selectedBoard?.id) ? 'selected' : ''}>
+                    ${board.title}
+                </option>
+            `).join('');
+
+            mainContent.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto my-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">${itemData ? 'Edit Item' : 'Add New Item'}</h2>
+                    <form id="item-form" class="space-y-4">
+                        <div>
+                            <label htmlFor="boardId" class="block text-sm font-medium text-gray-700">Board</label>
+                            <select
+                                id="item-boardId"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required
+                                ${selectedBoard ? 'disabled' : ''}
+                            >
+                                <option value="">Select a Board</option>
+                                ${boardOptions}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label htmlFor="authorizationDate" class="block text-sm font-medium text-gray-700">Fecha de autorizacion</label>
+                            <input
+                                type="date"
+                                id="item-authorizationDate"
+                                value="${itemData?.authorizationDate?.toDate().toISOString().split('T')[0] || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="authorizedBy" class="block text-sm font-medium text-gray-700">Quien Autorizo</label>
+                            <select
+                                id="item-authorizedBy"
+                                value="${itemData?.authorizedBy || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="">Select</option>
+                                <option value="Mari">Mari</option>
+                                <option value="Denis">Denis</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="nuevoResurtido" class="block text-sm font-medium text-gray-700">Nuevo/Resurtido</label>
+                            <select
+                                id="item-nuevoResurtido"
+                                value="${itemData?.nuevoResurtido || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="">Select</option>
+                                <option value="Nuevo">Nuevo</option>
+                                <option value="Resurtido">Resurtido</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label htmlFor="marca" class="block text-sm font-medium text-gray-700">Marca</label>
+                            <input
+                                type="text"
+                                id="item-marca"
+                                value="${itemData?.marca || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="material" class="block text-sm font-medium text-gray-700">Material</label>
+                            <input
+                                type="text"
+                                id="item-material"
+                                value="${itemData?.material || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="especificaciones" class="block text-sm font-medium text-gray-700">Especificaciones</label>
+                            <textarea
+                                id="item-especificaciones"
+                                value="${itemData?.especificaciones || ''}"
+                                rows="3"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            ></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label htmlFor="piezasSolicitadas" class="block text-sm font-medium text-gray-700">Piezas Solicitadas</label>
+                                <input
+                                    type="number"
+                                    id="item-piezasSolicitadas"
+                                    value="${itemData?.piezasSolicitadas || ''}"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="precioUnitario" class="block text-sm font-medium text-gray-700">Precio unitario</label>
+                                <input
+                                    type="number"
+                                    id="item-precioUnitario"
+                                    value="${itemData?.precioUnitario || ''}"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="total" class="block text-sm font-medium text-gray-700">Total (Piezas Solicitadas * Precio Unitario)</label>
+                            <input
+                                type="text"
+                                id="item-total"
+                                value="${itemData?.total?.toFixed(2) || '0.00'}"
+                                readonly
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-600 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="nombreCliente" class="block text-sm font-medium text-gray-700">Nombre de Cliente</label>
+                            <input
+                                type="text"
+                                id="item-nombreCliente"
+                                value="${itemData?.nombreCliente || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="direccionCliente" class="block text-sm font-medium text-gray-700">Direccion de cliente</label>
+                            <textarea
+                                id="item-direccionCliente"
+                                value="${itemData?.direccionCliente || ''}"
+                                rows="3"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label htmlFor="telefonoCliente" class="block text-sm font-medium text-gray-700">Telefono de cliente</label>
+                            <input
+                                type="tel"
+                                id="item-telefonoCliente"
+                                value="${itemData?.telefonoCliente || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="fechaAnticipo" class="block text-sm font-medium text-gray-700">Fecha de Anticipo</label>
+                            <input
+                                type="date"
+                                id="item-fechaAnticipo"
+                                value="${itemData?.fechaAnticipo?.toDate().toISOString().split('T')[0] || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="efectivoOTransferencia" class="block text-sm font-medium text-gray-700">Efectivo O Transferencia</label>
+                            <select
+                                id="item-efectivoOTransferencia"
+                                value="${itemData?.efectivoOTransferencia || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="">Select</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Cuenta fiscal">Cuenta fiscal</option>
+                                <option value="Cuenta coppel">Cuenta coppel</option>
+                                <option value="Otra cuenta">Otra cuenta</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label htmlFor="montoAnticipo" class="block text-sm font-medium text-gray-700">Monto Anticipo</label>
+                            <input
+                                type="number"
+                                id="item-montoAnticipo"
+                                value="${itemData?.montoAnticipo || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="fechaLlegada" class="block text-sm font-medium text-gray-700">Fecha de llegada</label>
+                            <input
+                                type="date"
+                                id="item-fechaLlegada"
+                                value="${itemData?.fechaLlegada?.toDate().toISOString().split('T')[0] || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="piezasQueLlegan" class="block text-sm font-medium text-gray-700">Piezas que llegan</label>
+                            <input
+                                type="number"
+                                id="item-piezasQueLlegan"
+                                value="${itemData?.piezasQueLlegan || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="nuevoTotal" class="block text-sm font-medium text-gray-700">Nuevo Total (Piezas que llegan * Precio unitario)</label>
+                            <input
+                                type="text"
+                                id="item-nuevoTotal"
+                                value="${itemData?.nuevoTotal?.toFixed(2) || '0.00'}"
+                                readonly
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-600 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="descuentoOption" class="block text-sm font-medium text-gray-700">Descuento</label>
+                            <select
+                                id="item-descuentoOption"
+                                value="${itemData?.descuentoOption || 'No'}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="No">No</option>
+                                <option value="Si">Si</option>
+                            </select>
+                        </div>
+                        <div id="motivo-descuento-group" style="display: ${itemData?.descuentoOption === 'Si' ? 'block' : 'none'};">
+                            <label htmlFor="motivoDescuento" class="block text-sm font-medium text-gray-700">Motivo Descuento</label>
+                            <textarea
+                                id="item-motivoDescuento"
+                                value="${itemData?.motivoDescuento || ''}"
+                                rows="2"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            ></textarea>
+                        </div>
+                        <div id="descuento-amount-group" style="display: ${itemData?.descuentoOption === 'Si' ? 'block' : 'none'};">
+                            <label htmlFor="descuentoAmount" class="block text-sm font-medium text-gray-700">Monto del Descuento</label>
+                            <input
+                                type="number"
+                                id="item-descuentoAmount"
+                                value="${itemData?.descuentoAmount || ''}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="ivaOption" class="block text-sm font-medium text-gray-700">IVA</label>
+                            <select
+                                id="item-ivaOption"
+                                value="${itemData?.ivaOption || 'No'}"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="No">No</option>
+                                <option value="Si">Si</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="totalConIVA" class="block text-sm font-medium text-gray-700">Total con IVA</label>
+                            <input
+                                type="text"
+                                id="item-totalConIVA"
+                                value="${itemData?.totalConIVA?.toFixed(2) || '0.00'}"
+                                readonly
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-600 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="granTotal" class="block text-sm font-medium text-gray-700">Gran Total</label>
+                            <input
+                                type="text"
+                                id="item-granTotal"
+                                value="${itemData?.granTotal?.toFixed(2) || '0.00'}"
+                                readonly
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-600 sm:text-sm"
+                            />
+                        </div>
+
+                        <div class="flex justify-end space-x-3">
+                            <button
+                                type="button"
+                                id="item-cancel-btn"
+                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                id="item-save-btn"
+                                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                            >
+                                Save Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+
+            const itemForm = document.getElementById('item-form');
+            const piezasSolicitadasInput = document.getElementById('item-piezasSolicitadas');
+            const precioUnitarioInput = document.getElementById('item-precioUnitario');
+            const totalInput = document.getElementById('item-total');
+            const piezasQueLleganInput = document.getElementById('item-piezasQueLlegan');
+            const nuevoTotalInput = document.getElementById('item-nuevoTotal');
+            const descuentoOptionSelect = document.getElementById('item-descuentoOption');
+            const motivoDescuentoGroup = document.getElementById('motivo-descuento-group');
+            const descuentoAmountGroup = document.getElementById('descuento-amount-group');
+            const descuentoAmountInput = document.getElementById('item-descuentoAmount');
+            const ivaOptionSelect = document.getElementById('item-ivaOption');
+            const totalConIVAInput = document.getElementById('item-totalConIVA');
+            const montoAnticipoInput = document.getElementById('item-montoAnticipo');
+            const granTotalInput = document.getElementById('item-granTotal');
+
+
+            const calculateTotals = () => {
+                const ps = parseFloat(piezasSolicitadasInput.value) || 0;
+                const pu = parseFloat(precioUnitarioInput.value) || 0;
+                const pql = parseFloat(piezasQueLleganInput.value) || 0;
+                const da = descuentoOptionSelect.value === 'Si' ? (parseFloat(descuentoAmountInput.value) || 0) : 0;
+                const ma = parseFloat(montoAnticipoInput.value) || 0;
+
+                const calculatedTotal = ps * pu;
+                totalInput.value = calculatedTotal.toFixed(2);
+
+                const calculatedNuevoTotal = pql * pu;
+                nuevoTotalInput.value = calculatedNuevoTotal.toFixed(2);
+
+                const subtotal = calculatedNuevoTotal - da;
+                const calculatedTotalConIVA = ivaOptionSelect.value === 'Si' ? subtotal * 1.16 : subtotal;
+                totalConIVAInput.value = calculatedTotalConIVA.toFixed(2);
+
+                const calculatedGranTotal = calculatedTotalConIVA - ma;
+                granTotalInput.value = calculatedGranTotal.toFixed(2);
+            };
+
+            piezasSolicitadasInput.addEventListener('input', calculateTotals);
+            precioUnitarioInput.addEventListener('input', calculateTotals);
+            piezasQueLleganInput.addEventListener('input', calculateTotals);
+            descuentoAmountInput.addEventListener('input', calculateTotals);
+            montoAnticipoInput.addEventListener('input', calculateTotals);
+
+            descuentoOptionSelect.addEventListener('change', () => {
+                if (descuentoOptionSelect.value === 'Si') {
+                    motivoDescuentoGroup.style.display = 'block';
+                    descuentoAmountGroup.style.display = 'block';
+                } else {
+                    motivoDescuentoGroup.style.display = 'none';
+                    descuentoAmountGroup.style.display = 'none';
+                    descuentoAmountInput.value = ''; // Clear discount amount if 'No'
+                }
+                calculateTotals();
+            });
+
+            ivaOptionSelect.addEventListener('change', calculateTotals);
+
+            // Initial calculation on form load
+            calculateTotals();
+
+
+            itemForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const itemDataToSave = {
+                    boardId: document.getElementById('item-boardId').value,
+                    authorizationDate: document.getElementById('item-authorizationDate').value ? Timestamp.fromDate(new Date(document.getElementById('item-authorizationDate').value)) : null,
+                    authorizedBy: document.getElementById('item-authorizedBy').value,
+                    nuevoResurtido: document.getElementById('item-nuevoResurtido').value,
+                    marca: document.getElementById('item-marca').value,
+                    material: document.getElementById('item-material').value,
+                    especificaciones: document.getElementById('item-especificaciones').value,
+                    piezasSolicitadas: parseFloat(document.getElementById('item-piezasSolicitadas').value) || 0,
+                    precioUnitario: parseFloat(document.getElementById('item-precioUnitario').value) || 0,
+                    total: parseFloat(document.getElementById('item-total').value) || 0,
+                    nombreCliente: document.getElementById('item-nombreCliente').value,
+                    direccionCliente: document.getElementById('item-direccionCliente').value,
+                    telefonoCliente: document.getElementById('item-telefonoCliente').value,
+                    fechaAnticipo: document.getElementById('item-fechaAnticipo').value ? Timestamp.fromDate(new Date(document.getElementById('item-fechaAnticipo').value)) : null,
+                    efectivoOTransferencia: document.getElementById('item-efectivoOTransferencia').value,
+                    montoAnticipo: parseFloat(document.getElementById('item-montoAnticipo').value) || 0,
+                    fechaLlegada: document.getElementById('item-fechaLlegada').value ? Timestamp.fromDate(new Date(document.getElementById('item-fechaLlegada').value)) : null,
+                    piezasQueLlegan: parseFloat(document.getElementById('item-piezasQueLlegan').value) || 0,
+                    nuevoTotal: parseFloat(document.getElementById('item-nuevoTotal').value) || 0,
+                    descuentoOption: document.getElementById('item-descuentoOption').value,
+                    motivoDescuento: document.getElementById('item-descuentoOption').value === 'Si' ? document.getElementById('item-motivoDescuento').value : '',
+                    descuentoAmount: document.getElementById('item-descuentoOption').value === 'Si' ? (parseFloat(document.getElementById('item-descuentoAmount').value) || 0) : 0,
+                    ivaOption: document.getElementById('item-ivaOption').value,
+                    totalConIVA: parseFloat(document.getElementById('item-totalConIVA').value) || 0,
+                    granTotal: parseFloat(document.getElementById('item-granTotal').value) || 0,
+                };
+
+                if (itemData) {
+                    await handleUpdateItem({ ...itemData, ...itemDataToSave });
+                } else {
+                    await handleAddItem(itemDataToSave);
+                }
+            });
+
+            document.getElementById('item-cancel-btn').addEventListener('click', () => {
+                currentView = 'items';
+                editingItem = null;
+                renderApp();
+            });
+        }
+
+        function renderItemList() {
+            const boardMap = boards.reduce((acc, board) => {
+                acc[board.id] = board.title;
+                return acc;
+            }, {});
+
+            const filteredItems = selectedBoard
+                ? items.filter(item => item.boardId === selectedBoard.id)
+                : items;
+
+            mainContent.innerHTML = `
+                <div class="container mx-auto p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800">
+                            ${selectedBoard ? `Items for "${selectedBoard.title}"` : 'All Items'}
+                        </h2>
+                        <div class="flex space-x-3">
+                            ${selectedBoard ? `
+                                <button
+                                    id="back-to-boards-btn"
+                                    class="px-6 py-3 bg-gray-600 text-white rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                                >
+                                    Back to Boards
+                                </button>
+                            ` : ''}
+                            <button
+                                id="add-item-btn"
+                                class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                            >
+                                Add New Item
+                            </button>
+                            <button
+                                id="export-excel-btn"
+                                class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                            >
+                                Export to Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    ${filteredItems.length === 0 ? `
+                        <p class="text-center text-gray-600 text-lg mt-10">
+                            ${selectedBoard ? `No items found for "${selectedBoard.title}".` : 'No items found. Add your first item!'}
+                        </p>
+                    ` : `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="items-grid">
+                            ${filteredItems.map(item => `
+                                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Item ID: ${item.id.substring(0, 8)}...</h3>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Board:</strong> ${boardMap[item.boardId] || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Fecha de autorizacion:</strong> ${formatDate(item.authorizationDate)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Quien Autorizo:</strong> ${item.authorizedBy || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Nuevo/Resurtido:</strong> ${item.nuevoResurtido || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Marca:</strong> ${item.marca || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Material:</strong> ${item.material || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Especificaciones:</strong> ${item.especificaciones || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Piezas Solicitadas:</strong> ${item.piezasSolicitadas || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Precio unitario:</strong> ${formatCurrency(item.precioUnitario)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Total:</strong> ${formatCurrency(item.total)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Nombre de Cliente:</strong> ${item.nombreCliente || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Direccion de cliente:</strong> ${item.direccionCliente || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Telefono de cliente:</strong> ${item.telefonoCliente || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Fecha de Anticipo:</strong> ${formatDate(item.fechaAnticipo)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Efectivo O Transferencia:</strong> ${item.efectivoOTransferencia || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Monto Anticipo:</strong> ${formatCurrency(item.montoAnticipo)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Fecha de llegada:</strong> ${formatDate(item.fechaLlegada)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Piezas que llegan:</strong> ${item.piezasQueLlegan || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Nuevo Total:</strong> ${formatCurrency(item.nuevoTotal)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Descuento:</strong> ${item.descuentoOption || 'N/A'}</p>
+                                        ${item.descuentoOption === 'Si' ? `
+                                            <p class="text-gray-700 text-sm mb-1"><strong>Motivo Descuento:</strong> ${item.motivoDescuento || 'N/A'}</p>
+                                            <p class="text-gray-700 text-sm mb-1"><strong>Monto Descuento:</strong> ${formatCurrency(item.descuentoAmount)}</p>
+                                        ` : ''}
+                                        <p class="text-gray-700 text-sm mb-1"><strong>IVA:</strong> ${item.ivaOption || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Total con IVA:</strong> ${formatCurrency(item.totalConIVA)}</p>
+                                        <p class="text-gray-700 text-sm"><strong>Gran Total:</strong> ${formatCurrency(item.granTotal)}</p>
+                                    </div>
+                                    <div class="mt-4 flex space-x-3">
+                                        <button
+                                            data-item-id="${item.id}"
+                                            class="edit-item-btn flex-1 px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            data-item-id="${item.id}"
+                                            class="delete-item-btn flex-1 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out text-sm"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+
+            if (selectedBoard) {
+                document.getElementById('back-to-boards-btn').addEventListener('click', () => {
+                    selectedBoard = null;
+                    currentView = 'boards';
+                    renderApp();
+                });
+            }
+
+            document.getElementById('add-item-btn').addEventListener('click', () => {
+                currentView = 'addItem';
+                editingItem = null;
+                renderApp();
+            });
+
+            document.getElementById('export-excel-btn').addEventListener('click', () => {
+                exportToCSV(filteredItems, 'items_export.csv');
+            });
+
+            document.querySelectorAll('.edit-item-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = e.target.dataset.itemId;
+                    editingItem = items.find(i => i.id === itemId);
+                    currentView = 'editItem';
+                    renderApp();
+                });
+            });
+
+            document.querySelectorAll('.delete-item-btn').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const itemId = e.target.dataset.itemId;
+                    await handleDeleteItem(itemId);
+                });
+            });
+        }
+
+        function renderSalesDashboard() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            let salesForMonth = [];
+            let totalSales = 0;
+
+            items.forEach(item => {
+                if (item.fechaAnticipo && item.fechaAnticipo instanceof Timestamp) {
+                    const itemDate = item.fechaAnticipo.toDate();
+                    if (itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear) {
+                        salesForMonth.push(item);
+                        totalSales += (parseFloat(item.granTotal) || 0);
+                    }
+                }
+            });
+
+            const boardMap = boards.reduce((acc, board) => {
+                acc[board.id] = board.title;
+                return acc;
+            }, {});
+
+            mainContent.innerHTML = `
+                <div class="container mx-auto p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800">Sales Dashboard - ${new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}</h2>
+                        <button
+                            id="dashboard-back-btn"
+                            class="px-6 py-3 bg-gray-600 text-white rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                        >
+                            Back to CRM
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Total Sales for the Month:</h3>
+                        <p class="text-4xl font-extrabold text-indigo-600">${formatCurrency(totalSales)}</p>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Items with Sales this Month:</h3>
+                    ${salesForMonth.length === 0 ? `
+                        <p class="text-center text-gray-600 text-lg mt-10">No sales items found for this month.</p>
+                    ` : `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${salesForMonth.map((item) => `
+                                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-900 mb-1">Item ID: ${item.id.substring(0, 8)}...</h4>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Board:</strong> ${boardMap[item.boardId] || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Nombre de Cliente:</strong> ${item.nombreCliente || 'N/A'}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Fecha de Anticipo:</strong> ${formatDate(item.fechaAnticipo)}</p>
+                                        <p class="text-gray-700 text-sm mb-1"><strong>Gran Total:</strong> ${formatCurrency(item.granTotal)}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+
+            document.getElementById('dashboard-back-btn').addEventListener('click', () => {
+                currentView = 'items'; // Or 'boards', depending on preferred return
+                renderApp();
+            });
+        }
+
+
+        // --- CRUD Operations (adapted from React) ---
+        async function handleAddBoard(boardData) {
+            try {
+                if (!db || !userId) {
+                    console.error("Firestore DB or User ID not available.");
+                    return;
+                }
+                await addDoc(collection(db, `artifacts/${__app_id}/users/${userId}/boards`), {
+                    ...boardData,
+                    userId: userId
+                });
+                currentView = 'boards';
+                renderApp(); // Re-render to show updated list
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+        }
+
+        async function handleUpdateBoard(boardData) {
+            try {
+                if (!db || !userId) {
+                    console.error("Firestore DB or User ID not available.");
+                    return;
+                }
+                const boardRef = doc(db, `artifacts/${__app_id}/users/${userId}/boards`, boardData.id);
+                await updateDoc(boardRef, boardData);
+                currentView = 'boards';
+                editingBoard = null;
+                renderApp(); // Re-render to show updated list
+            } catch (e) {
+                console.error("Error updating document: ", e);
+            }
+        }
+
+        async function handleDeleteBoard(id) {
+            if (!confirm("Are you sure you want to delete this board and all its associated items?")) {
+                return;
+            }
+            try {
+                if (!db || !userId) {
+                    console.error("Firestore DB or User ID not available.");
+                    return;
+                }
+                const itemsToDeleteQuery = query(
+                    collection(db, `artifacts/${__app_id}/users/${userId}/items`),
+                    where("boardId", "==", id)
+                );
+                const itemsSnapshot = await getDocs(itemsToDeleteQuery);
+                const deleteItemPromises = itemsSnapshot.docs.map(d => deleteDoc(doc(db, `artifacts/${__app_id}/users/${userId}/items`, d.id)));
+                await Promise.all(deleteItemPromises);
+
+                await deleteDoc(doc(db, `artifacts/${__app_id}/users/${userId}/boards`, id));
+                renderApp(); // Re-render after deletion
+            } catch (e) {
+                console.error("Error deleting document: ", e);
+            }
+        }
+
+        async function handleAddItem(itemData) {
+            try {
+                if (!db || !userId) {
+                    console.error("Firestore DB or User ID not available.");
+                    return;
+                }
+                await addDoc(collection(db, `artifacts/${__app_id}/users/${userId}/items`), {
+                    ...itemData,
+                    userId: userId
+                });
+                currentView = 'items';
+                renderApp(); // Re-render to show updated list
+            } catch (e) {
+                console.error("Error adding item: ", e);
+            }
+        }
+
+        async function handleUpdateItem(itemData) {
+            try {
+                if (!db || !userId) {
+                    console.error("Firestore DB or User ID not available.");
+                    return;
+                }
+                const itemRef = doc(db, `artifacts/${__app_id}/users/${userId}/items`, itemData.id);
+                await updateDoc(itemRef, itemData);
+                currentView = 'items';
+                editingItem = null;
+                renderApp(); // Re-render to show updated list
+            } catch (e) {
+                console.error("Error updating item: ", e);
+            }
+        }
+
+        async function handleDeleteItem(id) {
+            if (!confirm("Are you sure you want to delete this item?")) {
+                return;
+            }
+            try {
+                if (!db || !userId) {
+                    console.error("Firestore DB or User ID not available.");
+                    return;
+                }
+                await deleteDoc(doc(db, `artifacts/${__app_id}/users/${userId}/items`, id));
+                renderApp(); // Re-render after deletion
+            } catch (e) {
+                console.error("Error deleting item: ", e);
+            }
+        }
+
+        // Function to export items to CSV
+        function exportToCSV(data, filename) {
+            if (data.length === 0) {
+                alert("No items to export.");
+                return;
+            }
+
+            // Define CSV headers (order matters for clarity in Excel)
+            const headers = [
+                "Item ID", "Board", "Fecha de autorizacion", "Quien Autorizo", "Nuevo/Resurtido",
+                "Marca", "Material", "Especificaciones", "Piezas Solicitadas", "Precio unitario", "Total",
+                "Nombre de Cliente", "Direccion de cliente", "Telefono de cliente", "Fecha de Anticipo",
+                "Efectivo O Transferencia", "Monto Anticipo", "Fecha de llegada", "Piezas que llegan",
+                "Nuevo Total", "Descuento (Si/No)", "Motivo Descuento", "Monto Descuento", "IVA (Si/No)",
+                "Total con IVA", "Gran Total"
+            ];
+
+            // Format data for CSV
+            const csvRows = data.map(item => {
+                const row = [];
+                row.push(item.id);
+                row.push(boards.find(b => b.id === item.boardId)?.title || 'N/A'); // Get board name
+                row.push(item.authorizationDate ? item.authorizationDate.toDate().toLocaleDateString() : '');
+                row.push(item.authorizedBy || '');
+                row.push(item.nuevoResurtido || '');
+                row.push(item.marca || '');
+                row.push(item.material || '');
+                row.push(item.especificaciones || '');
+                row.push(item.piezasSolicitadas || '');
+                row.push(item.precioUnitario || '');
+                row.push(item.total || '');
+                row.push(item.nombreCliente || '');
+                row.push(item.direccionCliente || '');
+                row.push(item.telefonoCliente || '');
+                row.push(item.fechaAnticipo ? item.fechaAnticipo.toDate().toLocaleDateString() : '');
+                row.push(item.efectivoOTransferencia || '');
+                row.push(item.montoAnticipo || '');
+                row.push(item.fechaLlegada ? item.fechaLlegada.toDate().toLocaleDateString() : '');
+                row.push(item.piezasQueLlegan || '');
+                row.push(item.nuevoTotal || '');
+                row.push(item.descuentoOption || '');
+                row.push(item.motivoDescuento || '');
+                row.push(item.descuentoAmount || '');
+                row.push(item.ivaOption || '');
+                row.push(item.totalConIVA || '');
+                row.push(item.granTotal || '');
+                return row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(','); // Handle commas and quotes
+            });
+
+            const csvString = [headers.join(','), ...csvRows].join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- Main Render Function ---
+        function renderApp() {
+            // Update active navigation button styling
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-indigo-700', 'font-semibold');
+                btn.classList.add('hover:bg-indigo-500');
+            });
+            if (currentView === 'boards' && !selectedBoard) {
+                navBoardsBtn.classList.add('bg-white', 'text-indigo-700', 'font-semibold');
+                navBoardsBtn.classList.remove('hover:bg-indigo-500');
+            } else if (currentView === 'items' && !selectedBoard) {
+                navItemsBtn.classList.add('bg-white', 'text-indigo-700', 'font-semibold');
+                navItemsBtn.classList.remove('hover:bg-indigo-500');
+            } else if (currentView === 'dashboard') {
+                navDashboardBtn.classList.add('bg-white', 'text-indigo-700', 'font-semibold');
+                navDashboardBtn.classList.remove('hover:bg-indigo-500');
+            }
+
+            // Render content based on currentView
+            switch (currentView) {
+                case 'boards':
+                    renderBoardList();
+                    break;
+                case 'addBoard':
+                    renderBoardForm(null);
+                    break;
+                case 'editBoard':
+                    renderBoardForm(editingBoard);
+                    break;
+                case 'items':
+                    renderItemList();
+                    break;
+                case 'addItem':
+                    renderItemForm(null);
+                    break;
+                case 'editItem':
+                    renderItemForm(editingItem);
+                    break;
+                case 'dashboard':
+                    renderSalesDashboard();
+                    break;
+                default:
+                    renderBoardList(); // Default to boards view
+            }
+        }
+
+        // --- Firebase Initialization and Data Listeners ---
+        window.onload = async () => {
+            try {
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+
+                if (Object.keys(firebaseConfig).length === 0) {
+                    console.error("Firebase config is missing. Please ensure __firebase_config is provided.");
+                    loadingScreen.style.display = 'none';
+                    mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Firebase configuration missing. Cannot load data.</p>';
+                    return;
+                }
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdSpan.textContent = userId;
+                        userIdDisplay.style.display = 'block';
+                        loadingScreen.style.display = 'none';
+
+                        // Set up Firestore listeners after auth is ready
+                        const boardsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/boards`));
+                        onSnapshot(boardsQuery, (snapshot) => {
+                            boards = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                            renderApp(); // Re-render whenever boards change
+                        }, (error) => {
+                            console.error("Error fetching boards:", error);
+                        });
+
+                        const itemsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/items`));
+                        onSnapshot(itemsQuery, (snapshot) => {
+                            items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                            renderApp(); // Re-render whenever items change
+                        }, (error) => {
+                            console.error("Error fetching items:", error);
+                        });
+
+                    } else {
+                        try {
+                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Error signing in:", error);
+                            loadingScreen.style.display = 'none';
+                            mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Authentication failed. Please try again.</p>';
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error initializing Firebase:", error);
+                loadingScreen.style.display = 'none';
+                mainContent.innerHTML = '<p class="text-center text-red-500 text-xl mt-10">Error: Failed to initialize application. Check console for details.</p>';
+            }
+        };
+
+        // --- Navigation Event Listeners ---
+        navBoardsBtn.addEventListener('click', () => {
+            currentView = 'boards';
+            selectedBoard = null; // Clear selected board when navigating to general boards view
+            renderApp();
+        });
+
+        navItemsBtn.addEventListener('click', () => {
+            currentView = 'items';
+            selectedBoard = null; // Clear selected board when navigating to general items view
+            renderApp();
+        });
+
+        navDashboardBtn.addEventListener('click', () => {
+            currentView = 'dashboard';
+            renderApp();
+        });
+
+    </script>
+</body>
+</html>
